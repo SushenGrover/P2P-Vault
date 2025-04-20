@@ -67,34 +67,28 @@ export default function usePeerConnection(roomId) {
         if (!peer) {
           createPeer(from, false);
         }
-
         peer.signal(signal);
-        retryCount = 0; // Reset on success
+        retryCount = 0;
       } catch (err) {
-        console.error("Error processing signal:", err);
-
-        if (retryCount < MAX_RETRIES) {
-          retryCount++;
-          console.log(`Retrying signal (${retryCount}/${MAX_RETRIES})...`);
-
-          // Wait and recreate peer
-          setTimeout(() => {
-            if (peer) {
-              try {
-                peer.destroy();
-              } catch (e) {}
-            }
-            peer = null;
-            createPeer(from, false);
-
-            // Retry the signal
+        // Only destroy and recreate if peer is NOT connected
+        if (!peer || !peer.connected) {
+          if (retryCount < MAX_RETRIES) {
+            retryCount++;
             setTimeout(() => {
-              peer.signal(signal);
-            }, 300);
-          }, 500);
+              if (peer) {
+                try { peer.destroy(); } catch (e) {}
+                peer = null;
+              }
+              createPeer(from, false);
+              setTimeout(() => {
+                peer.signal(signal);
+              }, 300);
+            }, 500);
+          }
         }
       }
     });
+    
   };
 
   // Create a peer connection
@@ -104,16 +98,15 @@ export default function usePeerConnection(roomId) {
     // Check if we already have a peer - destroy it if so
     // Add this before destroying the peer
     if (peer) {
-      console.log("Checking before destroying peer...");
-      // Don't destroy if in the middle of file transfer
-      if (peer._channel && peer._channel.bufferedAmount > 0) {
-        console.log("Postponing peer destruction - transfer in progress");
-        return null; // Return existing peer
+      // Only destroy if not connected
+      if (peer.connected) {
+        console.log("Peer already connected, not recreating.");
+        return peer;
       }
-      console.log("Destroying existing peer before creating new one");
       peer.destroy();
       peer = null;
     }
+    
 
     try {
       // Create new peer with proper ICE servers
@@ -254,10 +247,11 @@ export default function usePeerConnection(roomId) {
   };
 
   const sendFile = async (file) => {
-    if (!peer || !connectionEstablished) {
-      console.error("Cannot send file: Peer connection not established");
+    if (!peer || !peer.connected || !peer._channel || peer._channel.readyState !== "open") {
+      console.error("Data channel not open");
       return false;
     }
+    
 
     try {
       // Check if data channel is open before each send operation
