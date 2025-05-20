@@ -125,7 +125,7 @@ project-root/
 
 ## 🙏 Acknowledgements
 
-- 👨‍🏫 **Professor Dr. Neelanarayanan V** — for expert guidance and mentorship.
+- 👨‍🏫 [Prof. Dr. Neelanarayanan V]([https://webrtc.org/](https://www.linkedin.com/in/neelanarayanan-venkatraman-21b1801/)) — for expert guidance and mentorship.
 - ⚙️ [WebRTC](https://webrtc.org/) — for browser-based peer-to-peer connections.
 - 🔌 [Socket.io](https://socket.io/) — for real-time communication.
 - 🧰 [Simple-Peer](https://github.com/feross/simple-peer) — for simplified WebRTC integration.
