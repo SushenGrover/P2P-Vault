@@ -1,6 +1,4 @@
 
----
-
 # 🚀 P2P Vault
 ## A Secure Peer to Peer File Sharing & Chat Application
 
