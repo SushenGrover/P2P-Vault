@@ -31,7 +31,7 @@ This project implements a **secure and private** peer-to-peer communication syst
 
 | Home Page | Chat Room | File Transfer |
 |-----------|-----------|---------------|
-| ![Home Screenshot](./screenshots/home.png) | ![Chat Screenshot](./screenshots/chat.png) | ![File Screenshot](./screenshots/file.png) |
+| ![Home Screenshot](./screenshots/2.png) | ![Chat Screenshot](./screenshots/4.png) | ![File Screenshot](./screenshots/5.png) |
 
 ---
 
